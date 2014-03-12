@@ -3,9 +3,9 @@ if [ $# -eq 0 ]; then
     echo -n "" > makefile.rules
 elif [ $# -eq 1 ]; then
     if [ $1 = "--with-debug" ]; then
-        echo "CXXFLAGS+=-g3" > makefile.rules
+        echo "CFLAGS+=-g3" > makefile.rules
     elif [ $1 = "--with-clang" ]; then
-        echo "CXX=clang" > makefile.rules
+        echo "CC=clang" > makefile.rules
     elif [ $1 = "--help" ]; then
         echo "./configure: --with-debug (debug mode)"
         echo "             --with-clang   (compile with clang)"
@@ -15,15 +15,15 @@ elif [ $# -eq 1 ]; then
 elif [ $# -eq 2 ]; then
     if [ $1 = "--with-debug" ]; then
         if [ $2 = "--with-clang" ]; then
-            echo "CXXFLAGS+=-g3" > makefile.rules
-            echo "CXX=clang" >> makefile.rules
+            echo "CFLAGS+=-g3" > makefile.rules
+            echo "CC=clang" >> makefile.rules
         else
             echo "use ./configure --help"
         fi
     elif [ $1 = "--with-clang" ]; then
         if [ $2 = "--with-debug" ]; then
-            echo "CXXFLAGS+=-g3" > makefile.rules
-            echo "CXX=clang" >> makefile.rules
+            echo "CFLAGS+=-g3" > makefile.rules
+            echo "CC=clang" >> makefile.rules
         else
           echo "use ./configure --help"
         fi
