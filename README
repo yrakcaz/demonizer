@@ -1,1 +1,10 @@
-WORK IN PROGRESS...
+README!
+-------
+
+Generate binary:
+    ./configure && make
+
+Usage:
+    ./dem [binary] [arguments]
+
+/!\ WORK STILL IN PROGRESS!
