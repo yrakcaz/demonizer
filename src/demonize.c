@@ -4,8 +4,7 @@
 void demonize(char **process, char **envp)
 {
     pid_t f = fork();
-    pid_t pid = getpid();
-    if (f)
+    if (!f)
     {
         int ret = execve(process[0], process, envp);
         if (ret < 0)
@@ -15,5 +14,5 @@ void demonize(char **process, char **envp)
         }
     }
     else
-        kill(pid, SIGKILL);
+        exit(0);
 }
