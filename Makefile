@@ -12,7 +12,7 @@ all: $(EXE)
 $(EXE): $(OBJ)
 	$(CC) $(CFLAGS) -o $(EXE) $^
 
-%.oc: %.cc
+%.o: %.c
 	$(CC) $(CFLAGS) -c -o $@ $^
 
 clean:
