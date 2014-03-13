@@ -5,7 +5,8 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <string.h>
+# include "list.h"
 
-void demonize(char **argv, char **envp);
+void treatment(int argc, char **argv, char **envp);
 
 #endif /* !DEMONIZE_H */
