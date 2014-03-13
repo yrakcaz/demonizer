@@ -64,7 +64,7 @@ static s_list *get_args(int argc, char **argv)
     return list;
 }
 
-static void demonize(char **process, char **envp)
+static void execute(char **process, char **envp)
 {
     pid_t f = fork();
     if (!f)
@@ -76,8 +76,6 @@ static void demonize(char **process, char **envp)
             exit(1);
         }
     }
-    else
-        exit(0);
 }
 
 void treatment(int argc, char **argv, char **envp)
@@ -93,7 +91,7 @@ void treatment(int argc, char **argv, char **envp)
             j++;
         }
         cmd[j] = NULL;
-        demonize(get_process(cmd), envp);
+        execute(get_process(cmd), envp);
     }
     else
     {
@@ -108,7 +106,7 @@ void treatment(int argc, char **argv, char **envp)
             }
             cmd[j] = NULL;
             tmp = tmp->next;
-            demonize(get_process(cmd), envp);
+            execute(get_process(cmd), envp);
         }
     }
 }
