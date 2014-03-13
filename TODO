@@ -7,6 +7,6 @@ TODO:
 
 - Options like restart etc.
 
-- Make install : --prefix in configure
+- Make install : --prefix in configure          DONE
 
 [...]

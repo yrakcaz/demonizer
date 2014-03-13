@@ -4,6 +4,7 @@ CFLAGS=-Wall -Wextra -Werror -std=c99 -pedantic
 SRC=src/list.c src/demonize.c src/main.c
 OBJ=$(SRC:.c=.o)
 TAR=yrakcaz-demonizer
+DIR=/usr/bin
 
 -include makefile.rules
 
@@ -25,6 +26,10 @@ export:
 	git archive HEAD --prefix=$(TAR)/ | bzip2 > $(TAR).tar.bz2
 
 install:
-	sudo cp dem /usr/bin
+ifeq ($(DIR),/usr/bin)
+	sudo cp dem $(DIR)
+else
+	cp dem $(DIR)
+endif
 
 .PHONY: all clean distclean export
