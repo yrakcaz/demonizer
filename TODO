@@ -2,7 +2,11 @@ TODO:
 -----
 
 - Leaks/valgrind
+
 - Multi-dem                                     FIXED
-- Make install (--prefix in configure?)
+
+- Options like restart etc.
+
+- Make install : --prefix in configure
 
 [...]
