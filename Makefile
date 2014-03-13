@@ -24,4 +24,7 @@ distclean: clean
 export:
 	git archive HEAD --prefix=$(TAR)/ | bzip2 > $(TAR).tar.bz2
 
+install:
+	sudo cp dem /usr/bin
+
 .PHONY: all clean distclean export

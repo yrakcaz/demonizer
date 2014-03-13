@@ -4,7 +4,10 @@ README!
 Generate binary:
     ./configure && make
 
+Install:
+    make install
+
 Usage:
-    ./dem [binary] [arguments]
+    ./dem --help
 
 /!\ WORK STILL IN PROGRESS!
