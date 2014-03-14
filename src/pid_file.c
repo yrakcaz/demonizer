@@ -18,6 +18,17 @@ static s_pidlist *add_pid(s_pid *pid, s_pidlist *list)
     return node;
 }
 
+static void display_pidlist(s_pidlist *list)
+{
+    s_pidlist *tmp = list;
+    while (tmp)
+    {
+	s_pid *pid = tmp->pid;
+    	printf("%d\t%s\t%d\n", pid->idx, pid->process, pid->pid);
+	tmp = tmp->next;
+    }
+}
+
 s_pidlist *parse_file()
 {
     struct passwd *pw = getpwuid(getuid());
@@ -144,5 +155,6 @@ void clean()
 
 int main()
 {
-    parse_file();
+    display_pidlist(parse_file());
+    return 0;
 }
