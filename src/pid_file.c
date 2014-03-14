@@ -7,49 +7,62 @@ static char *itoa(int n)
     return txt;
 }
 
+static s_pidlist *add_pid(s_pid *pid, s_pidlist *list)
+{
+    s_pidlist *node = malloc(sizeof (s_pidlist));
+    node->pid = pid;
+    if (!list)
+        node->next = NULL;
+    else
+        node->next = list;
+    return node;
+}
 
-//delete pid has to be done!
-/*static void delete_pid(int process)
+s_pidlist *parse_file()
 {
     struct passwd *pw = getpwuid(getuid());
     char *homedir = pw->pw_dir;
     char *path = malloc (128 * sizeof (char));
     sprintf(path, "%s/.dem.pid", homedir);
-    int fd = open(path, O_RDWR | O_CREAT, 0644);
-    char *str = malloc(4096 * sizeof (char));
-    read(fd, str, 4096);
-    close(fd);
-    FILE *f = fopen(path, "w");
-    for (int i = 0; str[i]; i++)
+    FILE *f = fopen(path, "r");
+    char buff[128];
+    s_pidlist *list = NULL;
+    while(fgets(buff, 100, f))
     {
-        char *num = malloc(16 * sizeof (char));
-        int j = i;
-        if (!i || str[i] == '\n')
+        s_pid *pid = malloc(sizeof (s_pid));
+        char *idx = malloc(128 * sizeof (char));
+        int i = 0;
+        while (buff[i] != '\t')
         {
-            int j = 0;
-            while (str[i] != '\t')
-            {
-                num[j] = str[i];
-                j++;
-                i++;
-            }
-            num[j] = '\0';
+            idx[i] = buff[i];
+            i++;
         }
-        if (atoi(num) == process)
-            while (str[i] != '\n')
-                i++;
-        else
+        idx[i] = '\0';
+        pid->idx = atoi(idx);
+        int j = 0;
+        while (buff[i] != '\t')
         {
-            while (str[i] != '\n')
-            {
-                fprintf(f, "%c", str[i]);
-                i++;
-            }
-            fprintf(f, "%c", str[i]);
+            idx[j] = buff[i];
+            i++;
+            j++;
         }
-        free (num);
+        idx[j] = '\0';
+        pid->process = idx;
+        char tpid[16];
+        j = 0;
+        while (buff[i] && buff[i] != '\n')
+        {
+            tpid[j] = buff[i];
+            i++;
+            j++;
+        }
+        tpid[j] = '\0';
+        pid->pid = atoi(tpid);
+        list = add_pid(pid, list);
     }
-}*/
+    fclose(f);
+    return list;
+}
 
 pid_t get_pid(int process)
 {
@@ -127,4 +140,9 @@ void clean()
     FILE *f = fopen(path, "w");
     fclose(f);
     exit(0);
+}
+
+int main()
+{
+    parse_file();
 }
