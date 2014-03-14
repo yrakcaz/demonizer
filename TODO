@@ -3,10 +3,10 @@ TODO:
 
 - Leaks/valgrind
 
-- Multi-dem                                     FIXED
+- Multi-dem                                             FIXED
 
-- Options like restart etc.
+- Restart, display pid file, delete from pid file!
 
-- Make install : --prefix in configure          DONE
+- Make install : --prefix in configure                  DONE
 
 [...]

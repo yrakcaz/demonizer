@@ -39,6 +39,7 @@ static void display_help()
 {
     printf("Usage: dem [option] [command] ...\n");
     printf("       --cmd, -c: if there is severals commands to demonize, use this option before each of them.\n");
+    printf("       --kill, -k: kill the process corresponding to the next index.\n");
     printf("       --help, -h: displays this help.\n");
 }
 
@@ -56,6 +57,19 @@ static s_list *get_args(int argc, char **argv)
             if (!strcmp(argv[i], "-h") || !strcmp(argv[i], "--help"))
             {
                 display_help();
+                exit(0);
+            }
+            else if (!strcmp(argv[i], "--clean"))
+                clean();
+            else if (!strcmp(argv[i], "-k") || !strcmp(argv[i], "--kill"))
+            {
+                if (!(argv + i + 1) || !argv[i + 1])
+                {
+                    fprintf(stderr, "dem: use --help or -h option");
+                    exit(1);
+                }
+                else
+                    kill(get_pid(atoi(argv[i + 1])), SIGKILL);
                 exit(0);
             }
             else if (!strcmp(argv[i], "-c") || !strcmp(argv[i], "--cmd"))
@@ -76,6 +90,8 @@ static void execute(char **process, char **envp)
             exit(1);
         }
     }
+    else
+        set_pid(process[0], f);
 }
 
 void treatment(int argc, char **argv, char **envp)

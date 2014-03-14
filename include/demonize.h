@@ -6,6 +6,8 @@
 # include <unistd.h>
 # include <string.h>
 # include <sys/types.h>
+# include <signal.h>
+# include "pid_file.h"
 # include "list.h"
 
 void treatment(int argc, char **argv, char **envp);
