@@ -18,7 +18,7 @@ static s_pidlist *add_pid(s_pid *pid, s_pidlist *list)
     return node;
 }
 
-static void display_pidlist(s_pidlist *list)
+/*static*/ void display_pidlist(s_pidlist *list)
 {
     s_pidlist *tmp = list;
     while (tmp)
@@ -51,12 +51,14 @@ s_pidlist *parse_file()
         idx[i] = '\0';
         pid->idx = atoi(idx);
         int j = 0;
+        i++;
         while (buff[i] != '\t')
         {
             idx[j] = buff[i];
             i++;
             j++;
         }
+        i++;
         idx[j] = '\0';
         pid->process = idx;
         char tpid[16];
@@ -151,10 +153,4 @@ void clean()
     FILE *f = fopen(path, "w");
     fclose(f);
     exit(0);
-}
-
-int main()
-{
-    display_pidlist(parse_file());
-    return 0;
 }
