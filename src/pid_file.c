@@ -79,46 +79,15 @@ s_pidlist *parse_file()
 
 pid_t get_pid(int process)
 {
-    struct passwd *pw = getpwuid(getuid());
-    char *homedir = pw->pw_dir;
-    char *path = malloc (128 * sizeof (char));
-    sprintf(path, "%s/.dem.pid", homedir);
-    int fd = open(path, O_RDWR | O_CREAT, 0644);
-    char *str = malloc(4096 * sizeof (char));
-    read(fd, str, 4096);
-    int i = 0;
-    while (str[i])
+    s_pidlist *list = parse_file();
+    s_pidlist *tmp = list;
+    while (tmp)
     {
-        char *line = malloc (128 * sizeof (char));
-        int j = 0;
-        while (str[i] != '\t')
-        {
-            line[j] = str[i];
-            i++;
-            j++;
-        }
-        line[j] = '\0';
-        if (atoi(line) == process)
-        {
-            i++;
-            while (str[i] != '\t')
-                i++;
-            i++;
-            j = 0;
-            while (str[i] != '\n')
-            {
-                line[j] = str[i];
-                i++;
-                j++;
-            }
-            line[j] = '\0';
-            return atoi(line);
-        }
-        while (str[i] != '\n')
-            i++;
-        i++;
-        free(line);
+        if (tmp->pid->idx == process)
+            return tmp->pid->pid;
+        tmp = tmp->next;
     }
+    free(list);
     return -1;
 }
 
