@@ -18,15 +18,41 @@ static s_pidlist *add_pid(s_pid *pid, s_pidlist *list)
     return node;
 }
 
-/*static*/ void display_pidlist(s_pidlist *list)
+static void write_pidlist(s_pidlist *list)
 {
+    struct passwd *pw = getpwuid(getuid());
+    char *homedir = pw->pw_dir;
+    char *path = malloc (128 * sizeof (char));
+    sprintf(path, "%s/.dem.pid", homedir);
+    FILE *f = fopen(path, "w");
     s_pidlist *tmp = list;
     while (tmp)
     {
         s_pid *pid = tmp->pid;
-        printf("%d\t%s\t%d\n", pid->idx, pid->process, pid->pid);
+        fprintf(f, "%d\t%s\t%d\n", pid->idx, pid->process, pid->pid);
         tmp = tmp->next;
     }
+}
+
+static void delete_pid(int process)
+{
+    s_pidlist *list = parse_file();
+    s_pidlist *tmp = list;
+    s_pidlist *prec = NULL;
+    while (tmp)
+    {
+        if (tmp->pid->idx == process)
+        {
+            if (!prec)
+                list = tmp->next;
+            else
+                prec->next = tmp->next;
+            break;
+        }
+        prec = tmp;
+        tmp = tmp->next;
+    }
+    write_pidlist(list);
 }
 
 s_pidlist *parse_file()
@@ -84,10 +110,13 @@ pid_t get_pid(int process)
     while (tmp)
     {
         if (tmp->pid->idx == process)
+        {
+            delete_pid(process);
+            //free(list);
             return tmp->pid->pid;
+        }
         tmp = tmp->next;
     }
-    free(list);
     return -1;
 }
 
