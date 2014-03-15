@@ -23,9 +23,9 @@ static s_pidlist *add_pid(s_pid *pid, s_pidlist *list)
     s_pidlist *tmp = list;
     while (tmp)
     {
-	s_pid *pid = tmp->pid;
-    	printf("%d\t%s\t%d\n", pid->idx, pid->process, pid->pid);
-	tmp = tmp->next;
+        s_pid *pid = tmp->pid;
+        printf("%d\t%s\t%d\n", pid->idx, pid->process, pid->pid);
+        tmp = tmp->next;
     }
 }
 
