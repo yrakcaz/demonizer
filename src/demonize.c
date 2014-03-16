@@ -97,7 +97,12 @@ static void execute(char **process, char **envp)
         }
     }
     else
-        set_pid(process[0], f);
+    {
+        char *p = malloc(128 * sizeof (char));
+        for (int i = 2; process[i]; i++)
+            p = strcat(p, process[i]);
+        set_pid(p, f);
+    }
 }
 
 void treatment(int argc, char **argv, char **envp)
