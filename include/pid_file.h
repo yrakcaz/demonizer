@@ -25,6 +25,7 @@ typedef struct pidlist
 s_pidlist *parse_file();
 pid_t get_pid(int process);
 void set_pid(char *process, pid_t pid);
+void display_pidlist();
 void clean();
 
 #endif /* !PID_FILE_H */

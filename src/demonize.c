@@ -40,6 +40,7 @@ static void display_help()
     printf("Usage: dem [option] [command] ...\n");
     printf("       --cmd, -c: if there is severals commands to demonize, use this option before each of them.\n");
     printf("       --kill, -k: kill the process corresponding to the next index.\n");
+    printf("       --jobs, -j: display jobs.\n");
     printf("       --help, -h: displays this help.\n");
 }
 
@@ -57,6 +58,11 @@ static s_list *get_args(int argc, char **argv)
             if (!strcmp(argv[i], "-h") || !strcmp(argv[i], "--help"))
             {
                 display_help();
+                exit(0);
+            }
+            else if(!strcmp(argv[i], "-j") || !strcmp(argv[i], "--jobs"))
+            {
+                display_pidlist();
                 exit(0);
             }
             else if (!strcmp(argv[i], "--clean"))

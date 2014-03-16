@@ -142,6 +142,17 @@ void set_pid(char *process, pid_t pid)
     close(fd);
 }
 
+void display_pidlist()
+{
+    s_pidlist *list = parse_file();
+    s_pidlist *tmp = list;
+    while (tmp)
+    {
+        printf("%d\t%s\t%d\n", tmp->pid->idx, tmp->pid->process, tmp->pid->pid);
+        tmp = tmp->next;
+    }
+}
+
 void clean()
 {
     struct passwd *pw = getpwuid(getuid());
