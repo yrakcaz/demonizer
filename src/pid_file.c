@@ -7,6 +7,28 @@ static char *itoa(int n)
     return txt;
 }
 
+static void destroy_pidlist(s_pidlist *list)
+{
+    if (!list)
+        return;
+    if (!(list->next))
+    {
+        if (list->pid)
+            free(list->pid);
+        free(list);
+        return;
+    }
+    s_pidlist *tmp = list;
+    while (tmp)
+    {
+        tmp = tmp->next;
+        if (list->pid)
+            free(list->pid);
+        free(list);
+        list = tmp;
+    }
+}
+
 static s_pidlist *add_pid(s_pid *pid, s_pidlist *list)
 {
     s_pidlist *node = malloc(sizeof (s_pidlist));
@@ -53,6 +75,7 @@ static void delete_pid(int process)
         tmp = tmp->next;
     }
     write_pidlist(list);
+    destroy_pidlist(list);
 }
 
 s_pidlist *parse_file()
@@ -117,6 +140,7 @@ pid_t get_pid(int process)
         }
         tmp = tmp->next;
     }
+    destroy_pidlist(list);
     return -1;
 }
 
@@ -151,6 +175,7 @@ void display_pidlist()
         printf("%d\t%s\t%d\n", tmp->pid->idx, tmp->pid->process, tmp->pid->pid);
         tmp = tmp->next;
     }
+    destroy_pidlist(list);
 }
 
 void clean()

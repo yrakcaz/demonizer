@@ -10,5 +10,6 @@ typedef struct list
 } s_list;
 
 s_list *add_to_list(int val, s_list *list);
+void destroy_list(s_list *list);
 
 #endif /* !LIST_H */

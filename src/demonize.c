@@ -102,6 +102,7 @@ static void execute(char **process, char **envp)
         for (int i = 2; process[i]; i++)
             p = strcat(p, process[i]);
         set_pid(p, f);
+        free(p);
     }
 }
 
@@ -136,4 +137,5 @@ void treatment(int argc, char **argv, char **envp)
             execute(get_process(cmd), envp);
         }
     }
+    destroy_list(positions);
 }
