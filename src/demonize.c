@@ -75,7 +75,12 @@ static s_list *get_args(int argc, char **argv)
                     exit(1);
                 }
                 else
-                    kill(get_pid(atoi(argv[i + 1])), SIGKILL);
+                {
+                    if (get_pid(atoi(argv[i + 1])) != -1)
+                        kill(get_pid(atoi(argv[i + 1])), SIGKILL);
+                    else
+                        fprintf(stderr, "dem: %d: process doesn't exist!\n", atoi(argv[i + 1]));
+                }
                 exit(0);
             }
             else if (!strcmp(argv[i], "-c") || !strcmp(argv[i], "--cmd"))
