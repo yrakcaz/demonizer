@@ -7,6 +7,10 @@ TODO:
 
 - Restart, refresh list!
 
+- Fix kill function for debian
+
+- Fix --jobs graphical display
+
 - Make install : --prefix in configure                  DONE
 
 [...]
