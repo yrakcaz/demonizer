@@ -10,6 +10,7 @@
 # include "pid_file.h"
 # include "tools.h"
 
+int kill(pid_t pid, int sig);
 void treatment(int argc, char **argv, char **envp);
 
 #endif /* !DEMONIZE_H */

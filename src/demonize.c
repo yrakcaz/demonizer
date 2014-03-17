@@ -89,7 +89,7 @@ static void restart(int process, char **envp)
         exit(0);
     }
     else
-        fprintf(stderr, "dem: %d: process not found!", process);
+        fprintf(stderr, "dem: %d: process not found!\n", process);
     exit(1);
 }
 
@@ -98,7 +98,7 @@ static s_list *get_args(int argc, char **argv, char **envp)
     s_list *list = NULL;
     if (argc <= 1)
     {
-        fprintf(stderr, "dem: use --help or -h option");
+        fprintf(stderr, "dem: use --help or -h option\n");
         exit(1);
     }
     else
@@ -120,7 +120,7 @@ static s_list *get_args(int argc, char **argv, char **envp)
             {
                 if (!(argv + i + 1) || !argv[i + 1])
                 {
-                    fprintf(stderr, "dem: use --help or -h option");
+                    fprintf(stderr, "dem: use --help or -h option\n");
                     exit(1);
                 }
                 else
@@ -136,7 +136,7 @@ static s_list *get_args(int argc, char **argv, char **envp)
             {
                 if (!(argv + i + 1) || !argv[i + 1])
                 {
-                    fprintf(stderr, "dem: use --help or -h option");
+                    fprintf(stderr, "dem: use --help or -h option\n");
                     exit(1);
                 }
                 else
