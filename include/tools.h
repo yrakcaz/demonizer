@@ -1,7 +1,8 @@
-#ifndef LIST_H
-# define LIST_H
+#ifndef TOOLS_H
+# define TOOLS_H
 
 # include <stdlib.h>
+# include <stdio.h>
 
 typedef struct list
 {
@@ -11,5 +12,6 @@ typedef struct list
 
 s_list *add_to_list(int val, s_list *list);
 void destroy_list(s_list *list);
+void my_kill(int pid);
 
-#endif /* !LIST_H */
+#endif /* !TOOLS_H */

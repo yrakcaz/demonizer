@@ -44,7 +44,56 @@ static void display_help()
     printf("       --help, -h: displays this help.\n");
 }
 
-static s_list *get_args(int argc, char **argv)
+static char **str_to_wordtab(char *str)
+{
+    char **ret = malloc(16 * sizeof (char *));
+    int i = 0;
+    do
+    {
+        ret[i] = strtok(str, " ");
+        i++;
+    } while (ret[i - 1]);
+    return ret;
+}
+
+static void execute(char **process, char **envp)
+{
+    pid_t f = fork();
+    if (!f)
+    {
+        int ret = execve(process[0], process, envp);
+        if (ret < 0)
+        {
+            fprintf(stderr, "dem: %s: an error has occurred\n", process[0]);
+            exit(1);
+        }
+    }
+    else
+    {
+        char *p = malloc(128 * sizeof (char));
+        for (int i = 2; process[i]; i++)
+            p = strcat(p, process[i]);
+        set_pid(p, f);
+        free(p);
+    }
+}
+
+static void restart(int process, char **envp)
+{
+    s_pid *pid = get_s_pid(process);
+    if (pid)
+    {
+        kill(pid->pid, SIGKILL);
+        delete_pid(process);
+        execute(str_to_wordtab(pid->process), envp);
+        exit(0);
+    }
+    else
+        fprintf(stderr, "dem: %d: process not found!", process);
+    exit(1);
+}
+
+static s_list *get_args(int argc, char **argv, char **envp)
 {
     s_list *list = NULL;
     if (argc <= 1)
@@ -83,37 +132,25 @@ static s_list *get_args(int argc, char **argv)
                 }
                 exit(0);
             }
+            else if (!strcmp(argv[i], "-r") || !strcmp(argv[i], "--restart"))
+            {
+                if (!(argv + i + 1) || !argv[i + 1])
+                {
+                    fprintf(stderr, "dem: use --help or -h option");
+                    exit(1);
+                }
+                else
+                    restart(atoi(argv[i + 1]), envp);
+            }
             else if (!strcmp(argv[i], "-c") || !strcmp(argv[i], "--cmd"))
                 list = add_to_list(i + 1, list);
     }
     return list;
 }
 
-static void execute(char **process, char **envp)
-{
-    pid_t f = fork();
-    if (!f)
-    {
-        int ret = execve(process[0], process, envp);
-        if (ret < 0)
-        {
-            fprintf(stderr, "dem: %s: an error has occurred\n", process[0]);
-            exit(1);
-        }
-    }
-    else
-    {
-        char *p = malloc(128 * sizeof (char));
-        for (int i = 2; process[i]; i++)
-            p = strcat(p, process[i]);
-        set_pid(p, f);
-        free(p);
-    }
-}
-
 void treatment(int argc, char **argv, char **envp)
 {
-    s_list *positions = get_args(argc, argv);
+    s_list *positions = get_args(argc, argv, envp);
     char **cmd = malloc(argc * sizeof (char *));
     if (!positions)
     {

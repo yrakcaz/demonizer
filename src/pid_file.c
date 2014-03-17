@@ -56,7 +56,7 @@ static void write_pidlist(s_pidlist *list)
     }
 }
 
-static void delete_pid(int process)
+void delete_pid(int process)
 {
     s_pidlist *list = parse_file();
     s_pidlist *tmp = list;
@@ -126,6 +126,15 @@ s_pidlist *parse_file()
     return list;
 }
 
+s_pid *get_s_pid(int process)
+{
+    s_pidlist *list = parse_file();
+    s_pidlist *tmp = list;
+    while (tmp && tmp->pid->idx != process)
+        tmp = tmp->next;
+    return !tmp ? NULL : tmp->pid;
+}
+
 pid_t get_pid(int process)
 {
     s_pidlist *list = parse_file();
@@ -135,7 +144,6 @@ pid_t get_pid(int process)
         if (tmp->pid->idx == process)
         {
             delete_pid(process);
-            //free(list);
             return tmp->pid->pid;
         }
         tmp = tmp->next;

@@ -1,7 +1,7 @@
 EXE=dem
 CC=gcc
 CFLAGS=-Wall -Wextra -Werror -std=c99 -pedantic
-SRC=src/pid_file.c src/list.c src/demonize.c src/main.c
+SRC=src/pid_file.c src/tools.c src/demonize.c src/main.c
 OBJ=$(SRC:.c=.o)
 TAR=yrakcaz-demonizer
 DIR=/usr/bin

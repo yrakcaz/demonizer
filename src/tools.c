@@ -1,4 +1,4 @@
-#include "../include/list.h"
+#include "../include/tools.h"
 
 s_list *add_to_list(int val, s_list *list)
 {
@@ -27,4 +27,11 @@ void destroy_list(s_list *list)
         free(list);
         list = tmp;
     }
+}
+
+void my_kill(int pid)
+{
+    char *kill = malloc(16 * sizeof (char));
+    sprintf(kill, "kill -9 %d", pid);
+    system(kill);
 }
