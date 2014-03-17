@@ -5,11 +5,13 @@ TODO:
 
 - Multi-dem                                             FIXED
 
-- Restart, refresh list!
+- Restart (test), refresh list!
 
 - Fix kill function for debian
 
 - Fix --jobs graphical display
+
+- Comments
 
 - Make install : --prefix in configure                  DONE
 
