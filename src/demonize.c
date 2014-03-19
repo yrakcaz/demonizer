@@ -46,13 +46,28 @@ static void display_help()
 
 static char **str_to_wordtab(char *str)
 {
-    char **ret = malloc(16 * sizeof (char *));
-    int i = 0;
-    do
+    char **ret = malloc(128 * sizeof (char *));
+    int j = 0;
+    int len = strlen(str);
+    while (str && str[0])
     {
-        ret[i] = strtok(str, " ");
-        i++;
-    } while (ret[i - 1]);
+        char *newstr = malloc(len * sizeof (char));
+        int i = 0;
+        while (str[i] == ' ')
+            i++;
+        int k = 0;
+        while (str[i] != ' ')
+        {
+            newstr[k] = str[i];
+            i++;
+            k++;
+        }
+        newstr[k] = '\0';
+        str += i;
+        ret[j] = newstr;
+        j++;
+    }
+    ret[j] = NULL;
     return ret;
 }
 
@@ -125,8 +140,9 @@ static s_list *get_args(int argc, char **argv, char **envp)
                 }
                 else
                 {
-                    if (get_pid(atoi(argv[i + 1])) != -1)
-                        kill(get_pid(atoi(argv[i + 1])), SIGKILL);
+                    int pid;
+                    if ((pid = get_pid(atoi(argv[i + 1]))) != -1)
+                        kill(pid, SIGKILL);
                     else
                         fprintf(stderr, "dem: %d: process doesn't exist!\n", atoi(argv[i + 1]));
                 }
