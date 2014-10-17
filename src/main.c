@@ -1,7 +1,7 @@
 #include "../include/demonize.h"
 
-int main(int argc, char **argv, char **envp)
+int main(int argc, char **argv)
 {
-    treatment(argc, argv, envp);
+    treatment(argc, argv);
     return 0;
 }

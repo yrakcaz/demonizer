@@ -28,10 +28,3 @@ void destroy_list(s_list *list)
         list = tmp;
     }
 }
-
-void my_kill(int pid)
-{
-    char *kill = malloc(16 * sizeof (char));
-    sprintf(kill, "kill -9 %d", pid);
-    system(kill);
-}

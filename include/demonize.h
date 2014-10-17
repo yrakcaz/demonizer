@@ -8,9 +8,10 @@
 # include <sys/types.h>
 # include <signal.h>
 # include "pid_file.h"
+# include "manage.h"
 # include "tools.h"
 
 int kill(pid_t pid, int sig);
-void treatment(int argc, char **argv, char **envp);
+void treatment(int argc, char **argv);
 
 #endif /* !DEMONIZE_H */

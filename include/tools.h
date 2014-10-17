@@ -12,6 +12,5 @@ typedef struct list
 
 s_list *add_to_list(int val, s_list *list);
 void destroy_list(s_list *list);
-void my_kill(int pid);
 
 #endif /* !TOOLS_H */

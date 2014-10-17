@@ -1,37 +1,15 @@
 #include "../include/demonize.h"
 
-static char *my_strcat(char *str1, char *str2)
-{
-    char *ret = malloc(1 + strlen(str1) + strlen(str2) * sizeof (char));
-    int i = 0;
-    while (str1[i])
-    {
-        ret[i] = str1[i];
-        i++;
-    }
-    ret[i] = ' ';
-    i++;
-    for (int j = 0; str2[j]; j++)
-    {
-        ret[i] = str2[j];
-        i++;
-    }
-    ret[i] = '\0';
-    return ret;
-}
-
 static char **get_process(char **cmd)
 {
     int len = 0;
+    int i = 0;
     while (cmd[len])
         len++;
-    char **process = malloc((len + 3) * sizeof (char *));
-    process[0] = "/bin/sh";
-    process[1] = "-c";
-    process[2] = malloc(sizeof (char));
-    for (int i = 0; i < len; i++)
-        process[2] = my_strcat(process[2], cmd[i]);
-    process[3] = NULL;
+    char **process = malloc((len + 1) * sizeof (char *));
+    for (i = 0; i < len; i++)
+        process[i] = cmd[i];
+    process[i] = NULL;
     return process;
 }
 
@@ -71,17 +49,18 @@ static char **str_to_wordtab(char *str)
     return ret;
 }
 
-static void execute(char **process, char **envp)
+static void execute(char **process)
 {
     pid_t f = fork();
     if (!f)
     {
-        int ret = execve(process[0], process, envp);
+        int ret = execvp(process[0], process);
         if (ret < 0)
         {
             fprintf(stderr, "dem: %s: an error has occurred\n", process[0]);
             exit(1);
         }
+        exit(0);
     }
     else
     {
@@ -93,14 +72,14 @@ static void execute(char **process, char **envp)
     }
 }
 
-static void restart(int process, char **envp)
+static void restart(int process)
 {
     s_pid *pid = get_s_pid(process);
     if (pid)
     {
         kill(pid->pid, SIGKILL);
         delete_pid(process);
-        execute(str_to_wordtab(pid->process), envp);
+        execute(str_to_wordtab(pid->process));
         exit(0);
     }
     else
@@ -108,7 +87,7 @@ static void restart(int process, char **envp)
     exit(1);
 }
 
-static s_list *get_args(int argc, char **argv, char **envp)
+static s_list *get_args(int argc, char **argv)
 {
     s_list *list = NULL;
     if (argc <= 1)
@@ -126,7 +105,7 @@ static s_list *get_args(int argc, char **argv, char **envp)
             }
             else if(!strcmp(argv[i], "-j") || !strcmp(argv[i], "--jobs"))
             {
-                display_pidlist();
+                display_deamons();
                 exit(0);
             }
             else if (!strcmp(argv[i], "--clean"))
@@ -156,7 +135,7 @@ static s_list *get_args(int argc, char **argv, char **envp)
                     exit(1);
                 }
                 else
-                    restart(atoi(argv[i + 1]), envp);
+                    restart(atoi(argv[i + 1]));
             }
             else if (!strcmp(argv[i], "-c") || !strcmp(argv[i], "--cmd"))
                 list = add_to_list(i + 1, list);
@@ -164,9 +143,9 @@ static s_list *get_args(int argc, char **argv, char **envp)
     return list;
 }
 
-void treatment(int argc, char **argv, char **envp)
+void treatment(int argc, char **argv)
 {
-    s_list *positions = get_args(argc, argv, envp);
+    s_list *positions = get_args(argc, argv);
     char **cmd = malloc(argc * sizeof (char *));
     if (!positions)
     {
@@ -177,7 +156,7 @@ void treatment(int argc, char **argv, char **envp)
             j++;
         }
         cmd[j] = NULL;
-        execute(get_process(cmd), envp);
+        execute(get_process(cmd));
     }
     else
     {
@@ -192,7 +171,7 @@ void treatment(int argc, char **argv, char **envp)
             }
             cmd[j] = NULL;
             tmp = tmp->next;
-            execute(get_process(cmd), envp);
+            execute(get_process(cmd));
         }
     }
     destroy_list(positions);
