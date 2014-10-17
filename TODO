@@ -5,11 +5,11 @@ TODO:
 
 - Multi-dem                                             FIXED
 
-- Restart (test), refresh list!
+- Restart, pause, etc..!
 
-- Fix kill function for debian
+- Fix kill function for debian                          DONE
 
-- Fix --jobs graphical display
+- Fix --jobs graphical display                          DONE
 
 - Comments
 

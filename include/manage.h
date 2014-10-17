@@ -14,6 +14,7 @@
 
 pid_t deamons[DEAMONS_SIZE];
 
+void get_deamons();
 void display_deamons();
 
 #endif /* !MANAGE_H */

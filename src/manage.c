@@ -64,7 +64,7 @@ static int is_a_deamon(char *dir)
     return 0;
 }
 
-static void get_deamons()
+void get_deamons()
 {
     for (int i = 0; i < DEAMONS_SIZE; i++)
         deamons[i] = 0;

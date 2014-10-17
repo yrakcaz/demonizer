@@ -7,7 +7,6 @@
 # include <string.h>
 # include <sys/types.h>
 # include <signal.h>
-# include "pid_file.h"
 # include "manage.h"
 # include "tools.h"
 
