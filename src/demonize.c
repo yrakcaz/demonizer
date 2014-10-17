@@ -1,25 +1,40 @@
 #include "../include/demonize.h"
 
-static char **get_process(char **cmd)
-{
-    int len = 0;
-    int i = 0;
-    while (cmd[len])
-        len++;
-    char **process = malloc((len + 1) * sizeof (char *));
-    for (i = 0; i < len; i++)
-        process[i] = cmd[i];
-    process[i] = NULL;
-    return process;
-}
-
 static void display_help()
 {
     printf("Usage: dem [option] [command] ...\n");
-    printf("       --cmd, -c: if there is severals commands to demonize, use this option before each of them.\n");
-    printf("       --kill, -k: kill the process corresponding to the next index.\n");
-    printf("       --jobs, -j: display jobs.\n");
-    printf("       --help, -h: displays this help.\n");
+    printf("       --cmd, -c:\tif you have severals commands to demonize, use this option before each of them.\n");
+    printf("       --kill, -k:\tkill the process corresponding to the next index.\n");
+    printf("       --restart, -r:\trestart the process corresponding to the next index.\n");
+    printf("       --jobs, -j:\tdisplay jobs.\n");
+    printf("       --help, -h:\tdisplays this help.\n");
+}
+
+char **str_to_wordtab(char *str)
+{
+    char **ret = malloc(128 * sizeof (char *));
+    int j = 0;
+    int len = strlen(str);
+    while (str && str[0])
+    {
+        char *newstr = malloc(len * sizeof (char));
+        int i = 0;
+        while (str[i] == ' ' || str[i] == '\t')
+            i++;
+        int k = 0;
+        while (str[i] != ' ' && str[i] != '\0' && str[i] != '\t')
+        {
+            newstr[k] = str[i];
+            i++;
+            k++;
+        }
+        newstr[k] = '\0';
+        str += i;
+        ret[j] = newstr;
+        j++;
+    }
+    ret[j] = NULL;
+    return ret;
 }
 
 static void execute(char **process)
@@ -48,6 +63,7 @@ static s_list *get_args(int argc, char **argv)
     else
     {
         for (int i = 1; i < argc; i++)
+        {
             if (!strcmp(argv[i], "-h") || !strcmp(argv[i], "--help"))
             {
                 display_help();
@@ -68,12 +84,37 @@ static s_list *get_args(int argc, char **argv)
                 else
                 {
                     get_deamons();
-                    kill(deamons[atoi(argv[i + 1])], SIGKILL);
+                    if (deamons[atoi(argv[i + 1])])
+                        kill(deamons[atoi(argv[i + 1])], SIGKILL);
+                    else
+                        fprintf(stderr, "dem: this doesn't exist\n");
+                }
+                exit(0);
+            }
+            else if (!strcmp(argv[i], "-r") || !strcmp(argv[i], "--restart"))
+            {
+                if (!(argv + i + 1) || !argv[i + 1])
+                {
+                    fprintf(stderr, "dem: use --help or -h option\n");
+                    exit(1);
+                }
+                else
+                {
+                    get_deamons();
+                    if (deamons[atoi(argv[i + 1])])
+                    {
+                        char *process = get_process_cmd(deamons[atoi(argv[i + 1])]);
+                        kill(deamons[atoi(argv[i + 1])], SIGKILL);
+                        execute(str_to_wordtab(process));
+                    }
+                    else
+                        fprintf(stderr, "dem: this doesn't exist\n");
                 }
                 exit(0);
             }
             else if (!strcmp(argv[i], "-c") || !strcmp(argv[i], "--cmd"))
                 list = add_to_list(i + 1, list);
+        }
     }
     return list;
 }
@@ -91,7 +132,7 @@ void treatment(int argc, char **argv)
             j++;
         }
         cmd[j] = NULL;
-        execute(get_process(cmd));
+        execute(cmd);
     }
     else
     {
@@ -106,7 +147,7 @@ void treatment(int argc, char **argv)
             }
             cmd[j] = NULL;
             tmp = tmp->next;
-            execute(get_process(cmd));
+            execute(cmd);
         }
     }
     destroy_list(positions);

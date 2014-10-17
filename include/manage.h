@@ -14,6 +14,7 @@
 
 pid_t deamons[DEAMONS_SIZE];
 
+char *get_process_cmd(pid_t pid);
 void get_deamons();
 void display_deamons();
 

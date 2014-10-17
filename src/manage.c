@@ -1,6 +1,6 @@
 #include "../include/manage.h"
 
-static char *get_process_name(pid_t pid)
+char *get_process_cmd(pid_t pid)
 {
     char name[64];
     sprintf(name, "/proc/%d/cmdline", pid);
@@ -86,5 +86,5 @@ void display_deamons()
     printf("----\t----\t--------\n\n");
     get_deamons();
     for (int i = 0; deamons[i] != 0; i++)
-        printf("[%d]\t%d\t%s\n", i, deamons[i], get_process_name(deamons[i]));
+        printf("[%d]\t%d\t%s\n", i, deamons[i], get_process_cmd(deamons[i]));
 }

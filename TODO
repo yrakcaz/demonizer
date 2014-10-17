@@ -1,17 +1,23 @@
 TODO:
 -----
 
-- Leaks/valgrind
-
 - Multi-dem                                             FIXED
 
-- Restart, pause, etc..!
+- Restart --> Debug for cmdline with args!!
+
+- Pause, stop, start, etc..!
 
 - Fix kill function for debian                          DONE
 
 - Fix --jobs graphical display                          DONE
 
+- Leaks/valgrind
+
+- Multi-everything??
+
 - Comments
+
+- Reorganize get_args
 
 - Make install : --prefix in configure                  DONE
 
