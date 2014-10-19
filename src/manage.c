@@ -5,15 +5,13 @@ char *get_process_cmd(pid_t pid)
     char name[64];
     sprintf(name, "/proc/%d/cmdline", pid);
     int fd = open(name, O_RDONLY);
-    char *ret = malloc(sizeof (char));
-    char c;
-    int i = 0;
-    while (read(fd, &c, 1))
-    {
-        ret[i++] = c;
-        ret = realloc(ret, i + 1);
-    }
+    char *ret = malloc(128 * sizeof (char));
+    int nbbytes = read(fd, ret, 128);
+    int i;
+    for (i = 0; i < nbbytes; i++)
+        ret[i] = ret[i] == '\0' ? ' ' : ret[i];
     ret[i] = '\0';
+    close(fd);
     return ret;
 }
 

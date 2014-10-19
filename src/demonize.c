@@ -10,7 +10,7 @@ static void display_help()
     printf("       --help, -h:\tdisplays this help.\n");
 }
 
-char **str_to_wordtab(char *str)
+static char **str_to_wordtab(char *str)
 {
     char **ret = malloc(128 * sizeof (char *));
     int j = 0;
