@@ -57,6 +57,7 @@ static int is_a_deamon(char *dir)
     while(read(fd, &c, 1) && c != ' ')
         ppid[i++] = c;
     ppid[i] = '\0';
+    close(fd);
     if (atoi(ppid) == 1)
         return 1;
     return 0;
