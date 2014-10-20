@@ -5,7 +5,7 @@ TODO:
 
 - Restart                                               DONE
 
-- Pause, stop, start, etc..!
+- Stop, continue..                                      DONE
 
 - Fix kill function for debian                          DONE
 
@@ -13,11 +13,11 @@ TODO:
 
 - Leaks/valgrind
 
-- Multi-everything??
-
 - Comments
 
 - Reorganize get_args
+
+- man??
 
 - Make install : --prefix in configure                  DONE
 
