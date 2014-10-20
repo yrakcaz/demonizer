@@ -84,5 +84,9 @@ void display_deamons()
     printf("----\t----\t--------\n\n");
     get_deamons();
     for (int i = 0; deamons[i] != 0; i++)
-        printf("[%d]\t%d\t%s\n", i, deamons[i], get_process_cmd(deamons[i]));
+    {
+        char *cmdline = get_process_cmd(deamons[i]);
+        printf("[%d]\t%d\t%s\n", i, deamons[i], cmdline);
+        free(cmdline);
+    }
 }

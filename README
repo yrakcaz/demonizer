@@ -2,12 +2,11 @@ README!
 -------
 
 Generate binary:
-    ./configure && make
+    ./configure --prefix=<INSTALL DIR> && make
 
 Install:
     make install
+    (if --prefix wasn't set in configure, install dir will be /usr/bin)
 
 Usage:
     ./dem --help
-
-/!\ WORK STILL IN PROGRESS!

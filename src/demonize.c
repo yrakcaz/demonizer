@@ -17,7 +17,7 @@ static char **str_to_wordtab(char *str)
     char **ret = malloc(128 * sizeof (char *));
     int j = 0;
     int len = strlen(str);
-    while (str && str[0])
+    while (str && str[0] && str[1])
     {
         char *newstr = malloc(len * sizeof (char));
         int i = 0;
@@ -107,7 +107,9 @@ static s_list *get_args(int argc, char **argv)
                     {
                         char *process = get_process_cmd(deamons[atoi(argv[i + 1])]);
                         kill(deamons[atoi(argv[i + 1])], SIGKILL);
-                        execute(str_to_wordtab(process));
+                        char **cmdline = str_to_wordtab(process);
+                        execute(cmdline);
+                        destroy_matrix(cmdline);
                     }
                     else
                         fprintf(stderr, "dem: this doesn't exist\n");

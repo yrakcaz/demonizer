@@ -11,14 +11,6 @@ TODO:
 
 - Fix --jobs graphical display                          DONE
 
-- Leaks/valgrind
-
-- Comments
-
-- Reorganize get_args
-
-- man??
+- Leaks/valgrind                                        DONE
 
 - Make install : --prefix in configure                  DONE
-
-[...]
