@@ -44,6 +44,12 @@ static void execute(char **process)
     pid_t f = fork();
     if (!f)
     {
+        int fd = open("/dev/null", 0);
+        dup2(fd, STDIN_FILENO);
+        dup2(fd, STDOUT_FILENO);
+        dup2(fd, STDERR_FILENO);
+        close(fd);
+
         int ret = execvp(process[0], process);
         if (ret < 0)
         {
