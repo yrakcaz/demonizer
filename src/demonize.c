@@ -60,6 +60,104 @@ static void execute(char **process)
     }
 }
 
+static void treat_kill(char **argv, int i)
+{
+    if (!(argv + i + 1) || !argv[i + 1])
+    {
+        fprintf(stderr, "dem: use --help or -h option\n");
+        exit(1);
+    }
+    else
+    {
+        get_deamons();
+        if (deamons[atoi(argv[i + 1])])
+        {
+            if (kill(deamons[atoi(argv[i + 1])], SIGKILL) != -1)
+                printf("Deamon has been killed!\n");
+            else
+                perror(NULL);
+
+        }
+        else
+            fprintf(stderr, "dem: this doesn't exist\n");
+    }
+    exit(0);
+}
+
+static void treat_restart(char **argv, int i)
+{
+    if (!(argv + i + 1) || !argv[i + 1])
+    {
+        fprintf(stderr, "dem: use --help or -h option\n");
+        exit(1);
+    }
+    else
+    {
+        get_deamons();
+        if (deamons[atoi(argv[i + 1])])
+        {
+            char *process = get_process_cmd(deamons[atoi(argv[i + 1])]);
+            if (kill(deamons[atoi(argv[i + 1])], SIGKILL) == -1)
+                perror(NULL);
+            else
+                printf("Deamon has been killed!\n");
+            char **cmdline = str_to_wordtab(process);
+            execute(cmdline);
+            printf("Deamon has been restarted!\n");
+            destroy_matrix(cmdline);
+        }
+        else
+            fprintf(stderr, "dem: this doesn't exist\n");
+    }
+    exit(0);
+}
+
+static void treat_continue(char **argv, int i)
+{
+    if (!(argv + i + 1) || !argv[i + 1])
+    {
+        fprintf(stderr, "dem: use --help or -h option\n");
+        exit(1);
+    }
+    else
+    {
+        get_deamons();
+        if (deamons[atoi(argv[i + 1])])
+        {
+            if (kill(deamons[atoi(argv[i + 1])], SIGCONT) == -1)
+                perror(NULL);
+            else
+                printf("Deamon has been continued!\n");
+        }
+        else
+            fprintf(stderr, "dem: this doesn't exist\n");
+    }
+    exit(0);
+}
+
+static void treat_stop(char **argv, int i)
+{
+    if (!(argv + i + 1) || !argv[i + 1])
+    {
+        fprintf(stderr, "dem: use --help or -h option\n");
+        exit(1);
+    }
+    else
+    {
+        get_deamons();
+        if (deamons[atoi(argv[i + 1])])
+        {
+            if(kill(deamons[atoi(argv[i + 1])], SIGSTOP) == -1)
+                perror(NULL);
+            else
+                printf("Deamon has been stopped!\n");
+        }
+        else
+            fprintf(stderr, "dem: this doesn't exist\n");
+    }
+    exit(0);
+}
+
 static s_list *get_args(int argc, char **argv)
 {
     s_list *list = NULL;
@@ -83,79 +181,13 @@ static s_list *get_args(int argc, char **argv)
                 exit(0);
             }
             else if (!strcmp(argv[i], "-k") || !strcmp(argv[i], "--kill"))
-            {
-                if (!(argv + i + 1) || !argv[i + 1])
-                {
-                    fprintf(stderr, "dem: use --help or -h option\n");
-                    exit(1);
-                }
-                else
-                {
-                    get_deamons();
-                    if (deamons[atoi(argv[i + 1])])
-                        kill(deamons[atoi(argv[i + 1])], SIGKILL);
-                    else
-                        fprintf(stderr, "dem: this doesn't exist\n");
-                }
-                exit(0);
-            }
+                treat_kill(argv, i);
             else if (!strcmp(argv[i], "-r") || !strcmp(argv[i], "--restart"))
-            {
-                if (!(argv + i + 1) || !argv[i + 1])
-                {
-                    fprintf(stderr, "dem: use --help or -h option\n");
-                    exit(1);
-                }
-                else
-                {
-                    get_deamons();
-                    if (deamons[atoi(argv[i + 1])])
-                    {
-                        char *process = get_process_cmd(deamons[atoi(argv[i + 1])]);
-                        kill(deamons[atoi(argv[i + 1])], SIGKILL);
-                        char **cmdline = str_to_wordtab(process);
-                        execute(cmdline);
-                        destroy_matrix(cmdline);
-                    }
-                    else
-                        fprintf(stderr, "dem: this doesn't exist\n");
-                }
-                exit(0);
-            }
+                treat_restart(argv, i);
             else if (!strcmp(argv[i], "-cont") || !strcmp(argv[i], "--continue"))
-            {
-                if (!(argv + i + 1) || !argv[i + 1])
-                {
-                    fprintf(stderr, "dem: use --help or -h option\n");
-                    exit(1);
-                }
-                else
-                {
-                    get_deamons();
-                    if (deamons[atoi(argv[i + 1])])
-                        kill(deamons[atoi(argv[i + 1])], SIGCONT);
-                    else
-                        fprintf(stderr, "dem: this doesn't exist\n");
-                }
-                exit(0);
-            }
+                treat_continue(argv, i);
             else if (!strcmp(argv[i], "-s") || !strcmp(argv[i], "--stop"))
-            {
-                if (!(argv + i + 1) || !argv[i + 1])
-                {
-                    fprintf(stderr, "dem: use --help or -h option\n");
-                    exit(1);
-                }
-                else
-                {
-                    get_deamons();
-                    if (deamons[atoi(argv[i + 1])])
-                        kill(deamons[atoi(argv[i + 1])], SIGSTOP);
-                    else
-                        fprintf(stderr, "dem: this doesn't exist\n");
-                }
-                exit(0);
-            }
+                treat_stop(argv, i);
             else if (!strcmp(argv[i], "-c") || !strcmp(argv[i], "--cmd"))
                 list = add_to_list(i + 1, list);
         }
@@ -177,6 +209,7 @@ void treatment(int argc, char **argv)
         }
         cmd[j] = NULL;
         execute(cmd);
+        printf("Deamon has been created!\n");
     }
     else
     {
@@ -192,6 +225,7 @@ void treatment(int argc, char **argv)
             cmd[j] = NULL;
             tmp = tmp->next;
             execute(cmd);
+            printf("Deamon has been created!\n");
         }
     }
     destroy_list(positions);
