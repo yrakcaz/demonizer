@@ -14,3 +14,5 @@ TODO:
 - Leaks/valgrind                                        DONE
 
 - Make install : --prefix in configure                  DONE
+
+- Redirect IO
