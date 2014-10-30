@@ -10,6 +10,7 @@ static void display_help()
     printf("       --continue, -cont:\tcontinue the running of the deamon corresponding to the next index if it was stopped.\n");
     printf("       --jobs, -j:\t\tdisplay jobs.\n");
     printf("       --help, -h:\t\tdisplays this help.\n");
+    exit(0);
 }
 
 static char **str_to_wordtab(char *str)
@@ -171,15 +172,9 @@ static s_list *get_args(int argc, char **argv)
         for (int i = 1; i < argc; i++)
         {
             if (!strcmp(argv[i], "-h") || !strcmp(argv[i], "--help"))
-            {
                 display_help();
-                exit(0);
-            }
             else if(!strcmp(argv[i], "-j") || !strcmp(argv[i], "--jobs"))
-            {
                 display_deamons();
-                exit(0);
-            }
             else if (!strcmp(argv[i], "-k") || !strcmp(argv[i], "--kill"))
                 treat_kill(argv, i);
             else if (!strcmp(argv[i], "-r") || !strcmp(argv[i], "--restart"))
@@ -198,17 +193,9 @@ static s_list *get_args(int argc, char **argv)
 void treatment(int argc, char **argv)
 {
     s_list *positions = get_args(argc, argv);
-    char **cmd = malloc(argc * sizeof (char *));
     if (!positions)
     {
-        int j = 0;
-        for (int i = 1; i < argc; i++)
-        {
-            cmd[j] = argv[i];
-            j++;
-        }
-        cmd[j] = NULL;
-        execute(cmd);
+        execute(argv + 1);
         printf("Deamon has been created!\n");
     }
     else
@@ -216,6 +203,7 @@ void treatment(int argc, char **argv)
         s_list *tmp = positions;
         while (tmp)
         {
+            char **cmd = malloc(argc * sizeof (char *));
             int j = 0;
             for (int i = tmp->val; argv[i] && strcmp(argv[i], "-c") && strcmp(argv[i], "--cmd"); i++)
             {

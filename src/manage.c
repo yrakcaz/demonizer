@@ -90,4 +90,5 @@ void display_deamons()
         printf("[%d]\t%d\t%s\n", i, deamons[i], cmdline);
         free(cmdline);
     }
+    exit(0);
 }
