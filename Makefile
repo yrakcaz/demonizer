@@ -3,8 +3,9 @@ CC=gcc
 CFLAGS=-Wall -Wextra -Werror -std=c99 -pedantic
 SRC=src/tools.c src/manage.c src/demonize.c src/main.c
 OBJ=$(SRC:.c=.o)
-TAR=yrakcaz-demonizer
-DIR=/usr/bin
+TAR=demonizer
+PREFIX=/usr/local
+CP=cp
 
 -include makefile.rules
 
@@ -17,13 +18,13 @@ $(EXE): $(OBJ)
 	$(CC) $(CFLAGS) -c -o $@ $^
 
 clean:
-	rm -f $(OBJ) $(EXE) $(TAR).tar.bz2
+	$(RM) $(OBJ) $(EXE) $(TAR).tar.bz2
 
 cleandoc:
-	rm -rf doc/html doc/latex doc/refman.pdf
+	$(RM) doc/html doc/latex doc/refman.pdf
 
 distclean: clean cleandoc
-	rm -f makefile.rules
+	$(RM) makefile.rules
 
 export:
 	git archive HEAD --prefix=$(TAR)/ | bzip2 > $(TAR).tar.bz2
@@ -34,10 +35,10 @@ doc:
 	mv doc/latex/refman.pdf doc/
 
 install:
-ifeq ($(DIR),/usr/bin)
-	sudo cp dem $(DIR)
-else
-	cp dem $(DIR)
-endif
+	$(CP) $(EXE) $(PREFIX)/bin
 
-.PHONY: all clean distclean export doc
+uninstall:
+	$(RM) $(PREFIX)/bin/$(EXE)
+
+
+.PHONY: all clean distclean export doc install uninstall
